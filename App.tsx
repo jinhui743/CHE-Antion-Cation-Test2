@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import type { Question, StudentData, QuizResult, Page } from './types';
 import { QUIZ_QUESTIONS, QUIZ_SUBJECT, QUIZ_TOPIC, GOOGLE_FORM_URL, ENTRY_IDS, getFeedbackMessage } from './constants';
@@ -415,7 +414,9 @@ const App: React.FC = () => {
             <main className="w-full max-w-2xl bg-white rounded-xl shadow-2xl overflow-hidden my-8">
                 <header className="p-6 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
                     <div className="flex items-center space-x-4">
-                        {/* <!-- 在此替换为你的Base64 Logo编码 --> */}
+                        {/* ==================================================================================== */}
+                        {/* 【重要】请将下面的 `src` 属性替换为你的 Base64 编码的 Logo 字符串 */}
+                        {/* ==================================================================================== */}
                         <img 
                           src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHdpZHRoPSI0OHB4IiBoZWlnaHQ9IjQ4cHgiPjxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMTIgM0w0IDEydi02aDJ2NGw2LTQuNSA2IDQuNXYtNGgydjZMMTIgM3ptLTEgNS41bDYgNC41di04bC02IDMuNXpNNiAycDMuNUw2IDQuN1Yyem05IDBoMy41bC0zLjUgMi41VjJ6TTQgMTJoMi41TDEwIDE3di0zTDQgMTJ6bTE2IDBsLTYgNXYtM2wzLjUgNC41SDE0bC00LTZIMTRsLTMuNS01SDE0bDQgNnoiLz48L3N2Zz4=" 
                           alt="Logo" 
