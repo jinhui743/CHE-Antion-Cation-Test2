@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import type { Question, StudentData, QuizResult, Page } from './types';
-import { QUIZ_QUESTIONS, QUIZ_SUBJECT, QUIZ_TOPIC, GOOGLE_FORM_URL, ENTRY_IDS, getFeedbackMessage, LOGO_BASE64 } from './constants';
+import { QUIZ_QUESTIONS, QUIZ_SUBJECT, QUIZ_TOPIC, GOOGLE_FORM_URL, ENTRY_IDS, getFeedbackMessage, LOGO_BASE64, CORRECT_ANSWER_SOUND_B64, WRONG_ANSWER_SOUND_B64 } from './constants';
 
 // Fix: Add a global declaration for window.MathJax to resolve TypeScript errors.
 declare global {
@@ -31,6 +31,15 @@ const decompressData = <T,>(base64String: string): T | null => {
   } catch (error) {
     console.error("Decompression failed:", error);
     return null;
+  }
+};
+
+const playAudio = (base64Audio: string) => {
+  try {
+    const audio = new Audio(base64Audio);
+    audio.play().catch(e => console.error("Audio play failed", e));
+  } catch (error) {
+    console.error("Failed to play audio:", error);
   }
 };
 
@@ -139,6 +148,12 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onQuizComplete }) => {
         if (selectedAnswer !== null) return;
 
         const correct = option === currentQuestion.answer;
+
+        if (correct) {
+            playAudio(CORRECT_ANSWER_SOUND_B64);
+        } else {
+            playAudio(WRONG_ANSWER_SOUND_B64);
+        }
 
         setSelectedAnswer(option);
         setIsCorrect(correct);
