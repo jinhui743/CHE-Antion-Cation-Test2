@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import type { Question, StudentData, QuizResult, Page } from './types';
+// FIX: Corrected typo from LOGO_BASE664 to LOGO_BASE64
 import { QUIZ_QUESTIONS, QUIZ_SUBJECT, QUIZ_TOPIC, GOOGLE_FORM_URL, ENTRY_IDS, getFeedbackMessage, LOGO_BASE64, CORRECT_ANSWER_SOUND_B64, WRONG_ANSWER_SOUND_B64 } from './constants';
 
 // Fix: Add a global declaration for window.MathJax to resolve TypeScript errors.
@@ -113,6 +115,40 @@ const StudentInfoPage: React.FC<StudentInfoPageProps> = ({ onStartQuiz }) => {
   );
 };
 
+interface ProgressBarProps {
+    current: number;
+    total: number;
+}
+
+const ProgressBar: React.FC<ProgressBarProps> = ({ current, total }) => {
+    const percentage = total > 0 ? (current / total) * 100 : 0;
+
+    return (
+        // Use grid to center the text content easily
+        <div className="w-full bg-gray-200 rounded-full h-4 relative grid place-items-center">
+            {/* Dark text for the unfilled part of the bar (base layer) */}
+            <span className="text-xs font-bold text-gray-700">
+                {current} / {total}
+            </span>
+
+            {/* Gradient fill with white text for the filled part of the bar (top layer) */}
+            {/* This layer is clipped to match the quiz progress percentage */}
+            <div
+                className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full grid place-items-center"
+                style={{
+                    clipPath: `polygon(0 0, ${percentage}% 0, ${percentage}% 100%, 0 100%)`,
+                    transition: 'clip-path 500ms ease-in-out',
+                }}
+            >
+                <span className="text-xs font-bold text-white">
+                    {current} / {total}
+                </span>
+            </div>
+        </div>
+    );
+};
+
+
 interface QuizPageProps {
   questions: Question[];
   onQuizComplete: (result: QuizResult) => void;
@@ -198,9 +234,9 @@ const QuizPage: React.FC<QuizPageProps> = ({ questions, onQuizComplete }) => {
 
     return (
         <div ref={questionContainerRef} className="space-y-6">
-            <div className="flex justify-between items-center text-gray-600">
-                <p className="font-medium">题目 {currentQuestionIndex + 1} / {questions.length}</p>
-                <p className="font-medium">用时: {Math.floor(time / 60).toString().padStart(2, '0')}:{ (time % 60).toString().padStart(2, '0')}</p>
+            <div className="flex justify-between items-center text-gray-600 space-x-4">
+                <ProgressBar current={currentQuestionIndex + 1} total={questions.length} />
+                <p className="font-medium whitespace-nowrap">用时: {Math.floor(time / 60).toString().padStart(2, '0')}:{ (time % 60).toString().padStart(2, '0')}</p>
             </div>
             <div className="text-lg font-semibold text-gray-800">{currentQuestion.question}</div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
